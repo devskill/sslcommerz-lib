@@ -20,29 +20,34 @@ variables:
 steps:
 
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet restore *.csproj'
   inputs:
     command: 'restore'
     projects: '**/**/*.csproj'
     workingDirectory: '.net./src'
 
 - task: DotNetCoreCLI@2
+  displayName: 'dotnet build *.csproj'
   inputs:
     command: 'build'
     projects: '**/**/*.csproj'
     workingDirectory: '.net./src'
 
 - task: NuGetToolInstaller@1
+  displayName: 'nuget install'
   inputs:
     versionSpec: 
     checkLatest: true
 
 - task: NuGetCommand@2
+  displayName: 'nuget restore'
   inputs:
     command: 'restore'
     restoreSolution: '**/**/*.sln'
     feedsToUse: 'select'
 
 - task: MSBuild@1
+  displayName: 'msbuild *.csproj'
   inputs:
     solution: '**/**/*.csproj'
     msbuildArchitecture: 'x64'
@@ -50,7 +55,7 @@ steps:
     configuration: 'Debug'
 
 - task: DotNetCoreCLI@2
-  displayName: "dotnet pack"
+  displayName: 'dotnet pack DevSkill.SSLCommerz.Core'
   inputs:
     command: 'pack'
     arguments: '--configuration $(buildConfiguration)'
