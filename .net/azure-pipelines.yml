@@ -54,7 +54,7 @@ steps:
     solution: '**/*.sln'
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
-    configuration: 'Debug'
+    configuration: '$(buildConfiguration)'
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
