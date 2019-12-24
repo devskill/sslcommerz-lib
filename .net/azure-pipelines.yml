@@ -55,11 +55,11 @@ steps:
     configuration: 'Debug'
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet pack DevSkill.SSLCommerz.Core'
+  displayName: 'dotnet pack'
   inputs:
     command: 'pack'
     arguments: '--configuration $(buildConfiguration)'
-    packagesToPack: '**/DevSkill.SSLCommerz.Core/DevSkill.SSLCommerz.Core.csproj'
+    packagesToPack: '**/**/*.csproj'
     nobuild: true
     versioningScheme: 'off'
     workingDirectory: '.net/src'
