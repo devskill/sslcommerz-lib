@@ -70,7 +70,7 @@ steps:
     externalFeedCredentials: '$(externalFeedCredentials)' 
     publishFeedCredentials: '$(publishFeedCredentials)'    
     packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
-    nuGetFeedType: 'external'
+    nuGetFeedType: 'internal'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
     versioningScheme: 'off'
-    allowPackageConflicts: false
+    allowPackageConflicts: true
