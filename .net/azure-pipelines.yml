@@ -58,11 +58,10 @@ steps:
   displayName: 'dotnet pack'
   inputs:
     command: 'pack'
-    arguments: '--configuration $(buildConfiguration)'
-    packagesToPack: '**/**/*.csproj'
+    arguments: '-c $(buildConfiguration)'
     nobuild: true
     versioningScheme: 'off'
-    workingDirectory: '.net/src'
+    workingDirectory: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core'
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
