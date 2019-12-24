@@ -61,8 +61,8 @@ steps:
   inputs:
     command: 'push'
     feedsToUse: 'config'    
-    externalFeedCredentials: '$(nugetCredentials)' 
-    publishFeedCredentials: '$(nugetCredentials)'
+    externalFeedCredentials: '$(externalFeedCredentials)' 
+    publishFeedCredentials: '$(publishFeedCredentials)'
     packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
