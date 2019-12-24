@@ -1,0 +1,27 @@
+jobs: 
+  job_id: 
+    name: abc
+    runs-on: ${{matrix.os}}
+  test: 
+    steps:
+      - name: Setup NuGet.exe for use with actions
+        uses: NuGet/setup-nuget@v1.0.2
+        with:
+          # NuGet version to install. Can be `latest`, `preview`, a concrete version like `5.3.1`, or a semver range specifier like `5.x`.
+          nuget-version: latest# optional, default is latest
+          # NuGet API Key to configure.
+      - name: Publish NuGet
+        uses: rohith/publish-nuget@v1.1.0
+        with:
+          # Project (csproj) directory path relative from the root of repository
+          project_dir: ./.net/src/DevSKill.SSLCommerz.Core # optional, default is .
+          # Format of the tag to be created, `*` is placeholder for actual version
+          tag_format: v* # optional, default is v*
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+on: 
+  push:
+    branches: master
+    
