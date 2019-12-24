@@ -53,7 +53,6 @@ steps:
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: 'Debug'
-    workingDirectory: '.net/src'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack DevSkill.SSLCommerz.Core'
