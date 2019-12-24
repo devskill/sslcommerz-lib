@@ -23,6 +23,7 @@ steps:
   displayName: 'dotnet restore *.csproj'
   inputs:
     command: 'restore'
+    arguments: '-c $(buildConfiguration)'
     projects: '**/**/*.csproj'
     workingDirectory: '.net/src'
 
@@ -30,6 +31,7 @@ steps:
   displayName: 'dotnet build *.csproj'
   inputs:
     command: 'build'
+    arguments: '-c $(buildConfiguration)'
     projects: '**/**/*.csproj'
     workingDirectory: '.net/src'
 
@@ -49,7 +51,7 @@ steps:
 - task: MSBuild@1
   displayName: 'msbuild *.csproj'
   inputs:
-    solution: '**/**/*.csproj'
+    solution: '**/*.sln'
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: 'Debug'
