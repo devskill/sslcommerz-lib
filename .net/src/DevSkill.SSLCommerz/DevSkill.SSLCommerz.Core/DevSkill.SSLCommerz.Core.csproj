@@ -9,6 +9,12 @@
 			8.0
 		</LangVersion>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Rafsanul Hasan</Authors>
+		<Company>DevSkill</Company>
+		<Product>SSL Commerz API Consumption Library: Core</Product>
+		<Copyright>Copyright (C) DevSkill, 2019-2020</Copyright>
+		<Version>1.0.0-beta1</Version>
+		<NeutralLanguage>en-US</NeutralLanguage>
 	</PropertyGroup>
 
 	<ItemGroup>
