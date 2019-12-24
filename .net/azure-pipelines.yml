@@ -24,14 +24,14 @@ steps:
   inputs:
     command: 'restore'
     projects: '**/**/*.csproj'
-    workingDirectory: '.net./src'
+    workingDirectory: '.net/src'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build *.csproj'
   inputs:
     command: 'build'
     projects: '**/**/*.csproj'
-    workingDirectory: '.net./src'
+    workingDirectory: '.net/src'
 
 - task: NuGetToolInstaller@1
   displayName: 'nuget install'
@@ -62,7 +62,7 @@ steps:
     packagesToPack: '**/DevSkill.SSLCommerz.Core/DevSkill.SSLCommerz.Core.csproj'
     nobuild: true
     versioningScheme: 'off'
-    workingDirectory: '.net./src'
+    workingDirectory: '.net/src'
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
