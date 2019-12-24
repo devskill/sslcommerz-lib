@@ -5,13 +5,14 @@
 
 trigger:
 - master
+- staging
 - dev
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
-  buildConfiguration: 'Release'
+  buildConfiguration: 'Debug'
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
