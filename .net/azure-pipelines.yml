@@ -73,5 +73,6 @@ steps:
     packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
-    versioningScheme: 'byBuildNumber'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: '$(versionEnvVar)'
     allowPackageConflicts: true
