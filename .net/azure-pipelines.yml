@@ -66,11 +66,12 @@ steps:
   displayName: 'nuget push'
   inputs:
     command: 'push'
+    arguments: '-SkipIfAlreadyPublished'
     feedsToUse: 'config'    
     externalFeedCredentials: '$(externalFeedCredentials)' 
     publishFeedCredentials: '$(publishFeedCredentials)'    
     packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
+    nuGetFeedType: 'external'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
     versioningScheme: 'off'
     allowPackageConflicts: true
