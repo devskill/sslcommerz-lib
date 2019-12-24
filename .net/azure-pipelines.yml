@@ -12,21 +12,21 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
+  solution: '**/*.sln'
   projects: '**/**/*.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
 steps:
-- task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   inputs:
-    restoreSolution: '$(solution)'
+    command: 'restore'
+    projects: '**/**/*.csproj'
+    workingDirectory: '.net./src'
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   inputs:
-    projects: '$(projects)'
-    msbuildArgs: '/p:DeployOnBuild=false'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
+    projects: '**/**/*.csproj'
+    workingDirectory: '.net./src'
