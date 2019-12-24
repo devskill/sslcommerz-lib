@@ -23,6 +23,7 @@ steps:
   displayName: 'dotnet restore *.csproj'
   inputs:
     command: 'restore'
+    arguments: '-c $(buildConfiguration)'
     projects: '**/**/*.csproj'
     workingDirectory: '.net/src'
 
@@ -30,6 +31,7 @@ steps:
   displayName: 'dotnet build *.csproj'
   inputs:
     command: 'build'
+    arguments: '-c $(buildConfiguration)'
     projects: '**/**/*.csproj'
     workingDirectory: '.net/src'
 
@@ -49,28 +51,26 @@ steps:
 - task: MSBuild@1
   displayName: 'msbuild *.csproj'
   inputs:
-    solution: '**/**/*.csproj'
+    solution: '**/*.sln'
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
-    configuration: 'Debug'
-    workingDirectory: '.net/src'
+    configuration: '$(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet pack DevSkill.SSLCommerz.Core'
+- task: NuGetCommand@2
+  displayName: 'nuget setApiKey'
   inputs:
-    command: 'pack'
-    arguments: '--configuration $(buildConfiguration)'
-    packagesToPack: '**/DevSkill.SSLCommerz.Core/DevSkill.SSLCommerz.Core.csproj'
-    nobuild: true
-    versioningScheme: 'off'
-    workingDirectory: '.net/src'
+    command: 'custom'
+    arguments: 'setApiKey $(nugetCredential)'
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
   inputs:
     command: 'push'
-    feedsToUse: 'select'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    arguments: '-SkipIfAlreadyPublished'
+    feedsToUse: 'config'    
+    externalFeedCredentials: '$(externalFeedCredentials)' 
+    publishFeedCredentials: '$(publishFeedCredentials)'    
+    packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
     versioningScheme: 'off'
