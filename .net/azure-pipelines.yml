@@ -60,7 +60,8 @@ steps:
   displayName: 'nuget push'
   inputs:
     command: 'push'
-    feedsToUse: 'config'
+    feedsToUse: 'config'    
+    externalFeedCredentials: '$(nugetCredentials)' 
     publishFeedCredentials: '$(nugetCredentials)'
     packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
     nuGetFeedType: 'external'
