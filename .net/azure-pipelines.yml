@@ -21,6 +21,7 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
+    name: '' 
     command: 'restore'
     projects: '**/**/*.csproj'
     workingDirectory: '.net./src'
@@ -30,3 +31,21 @@ steps:
     command: 'build'
     projects: '**/**/*.csproj'
     workingDirectory: '.net./src'
+
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: 
+    checkLatest: true
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/**/*.sln'
+    feedsToUse: 'select'
+
+- task: MSBuild@1
+  inputs:
+    solution: '**/**/*.csproj'
+    msbuildArchitecture: 'x64'
+    platform: 'Any CPU'
+    configuration: 'Debug'
