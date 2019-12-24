@@ -8,6 +8,7 @@
 		<LangVersion Condition="'$(TargetFramework)'=='netstandard2.1'">
 			8.0
 		</LangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
