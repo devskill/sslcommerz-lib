@@ -107,4 +107,4 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: '$(versionEnvVar)'
     allowPackageConflicts: false
-  condition: and(succeeded(), neq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(failed(), eq(variables['Build.Reason'], 'PullRequest'))
