@@ -78,6 +78,15 @@ steps:
     configuration: '$(buildConfiguration)'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
+- task: MSBuild@1
+  displayName: 'msbuild *.csproj release'
+  inputs:
+    solution: '**/*.sln'
+    msbuildArchitecture: 'x64'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+  condition: and(succeeded(), and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/pull')), eq(variables['Build.Reason'], 'PullRequest')
+
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
   inputs:
