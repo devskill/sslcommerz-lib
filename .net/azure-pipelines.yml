@@ -92,7 +92,7 @@ steps:
     feedsToUse: 'config'    
     externalFeedCredentials: '$(externalFeedCredentials)' 
     publishFeedCredentials: '$(publishFeedCredentials)'    
-    packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
+    packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nu*;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nu*'
     nuGetFeedType: 'external'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
     versioningScheme: 'byEnvVar'
