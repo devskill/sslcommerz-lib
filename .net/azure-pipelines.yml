@@ -52,6 +52,7 @@ steps:
   displayName: 'msbuild *.csproj'
   inputs:
     solution: '**/*.sln'
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(versionEnvVar)'
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
