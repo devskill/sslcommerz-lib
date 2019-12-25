@@ -52,7 +52,6 @@ steps:
   displayName: 'msbuild *.csproj'
   inputs:
     solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(versionEnvVar)'
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
@@ -74,6 +73,6 @@ steps:
     packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
-    versioningScheme: 'byEnvVar'
+    versioningScheme: 'off'
     versionEnvVar: '$(versionEnvVar)'
     allowPackageConflicts: true
