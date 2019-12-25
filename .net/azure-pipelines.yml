@@ -85,7 +85,7 @@ steps:
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(eq(variables['Build.Reason'], 'PullRequest')
+  condition: and(succeedded(), eq(variables['Build.Reason'], 'PullRequest')
 
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
@@ -107,4 +107,4 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: '$(versionEnvVar)'
     allowPackageConflicts: false
-  condition: and(neq(variables['Build.Reason'], 'PullRequest')
+  condition: and(succeeded(), neq(variables['Build.Reason'], 'PullRequest')
