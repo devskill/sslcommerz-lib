@@ -52,6 +52,7 @@ steps:
   displayName: 'msbuild *.csproj'
   inputs:
     solution: '**/*.sln'
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(versionEnvVar)'
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
@@ -66,12 +67,13 @@ steps:
   displayName: 'nuget push'
   inputs:
     command: 'push'
-    arguments: '-SkipIfAlreadyPublished'
+    arguments: '-SkipIfAlreadyPublished -SkipDuplicate'
     feedsToUse: 'config'    
     externalFeedCredentials: '$(externalFeedCredentials)' 
     publishFeedCredentials: '$(publishFeedCredentials)'    
-    packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nupkg'
+    packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.$(versionEnvVar).nupkg;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.$(versionEnvVar).symbols.nupkg'
     nuGetFeedType: 'external'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
-    versioningScheme: 'off'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: '$(versionEnvVar)'
     allowPackageConflicts: true
