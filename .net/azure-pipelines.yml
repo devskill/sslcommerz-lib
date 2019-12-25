@@ -49,13 +49,34 @@ steps:
     feedsToUse: 'select'
 
 - task: MSBuild@1
-  displayName: 'msbuild *.csproj'
+  displayName: 'msbuild *.csproj release'
   inputs:
     solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(buildConfiguration).$(versionEnvVar)'    
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(devVersionEnvVar)'    
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+
+- task: MSBuild@1
+  displayName: 'msbuild *.csproj release'
+  inputs:
+    solution: '**/*.sln'
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(betaVersionEnvVar)'    
+    msbuildArchitecture: 'x64'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/staging'))
+
+- task: MSBuild@1
+  displayName: 'msbuild *.csproj release'
+  inputs:
+    solution: '**/*.sln'
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(releaseVersionEnvVar)'    
+    msbuildArchitecture: 'x64'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
