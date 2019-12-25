@@ -49,7 +49,7 @@ steps:
     feedsToUse: 'select'
 
 - task: MSBuild@1
-  displayName: 'msbuild *.csproj release'
+  displayName: 'msbuild *.csproj dev'
   inputs:
     solution: '**/*.sln'
     msbuildArguments: '-t:Pack -p:PackageVersion=$(alphaVersionEnvVar)'    
@@ -59,7 +59,7 @@ steps:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
 
 - task: MSBuild@1
-  displayName: 'msbuild *.csproj release'
+  displayName: 'msbuild *.csproj staging'
   inputs:
     solution: '**/*.sln'
     msbuildArguments: '-t:Pack -p:PackageVersion=$(stagingVersionEnvVar)'    
@@ -69,7 +69,7 @@ steps:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/staging'))
 
 - task: MSBuild@1
-  displayName: 'msbuild *.csproj release'
+  displayName: 'msbuild *.csproj master'
   inputs:
     solution: '**/*.sln'
     msbuildArguments: '-t:Pack -p:PackageVersion=$(releaseVersionEnvVar)'    
@@ -77,6 +77,15 @@ steps:
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+- task: MSBuild@1
+  displayName: 'msbuild *.csproj release'
+  inputs:
+    solution: '**/*.sln'
+    msbuildArchitecture: 'x64'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
@@ -98,3 +107,4 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: '$(versionEnvVar)'
     allowPackageConflicts: false
+  condition: and(failed(), eq(variables['Build.Reason'], 'PullRequest'))
