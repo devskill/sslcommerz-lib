@@ -52,7 +52,7 @@ steps:
   displayName: 'msbuild *.csproj release'
   inputs:
     solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(devVersionEnvVar)'    
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(alphaVersionEnvVar)'    
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
@@ -62,7 +62,7 @@ steps:
   displayName: 'msbuild *.csproj release'
   inputs:
     solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(betaVersionEnvVar)'    
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(stagingVersionEnvVar)'    
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
