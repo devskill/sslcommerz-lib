@@ -4,12 +4,25 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
-- staging
-- dev
+  batch : true
+  branches:
+    include:    
+      - azure*    
+      - feature/*   
+      - feature/*/*
+      - staging
+      - master
+          
+pr:
+  autoCancel: false
+  branches:
+    include:
+      - azure*
+      - staging
+      - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-2019'
 
 variables:
   solution: '**/*.sln'
@@ -18,61 +31,76 @@ variables:
   buildConfiguration: 'Release'
   isPR: $[eq(variables.Build.Reason, 'PullRequest')]
   isMerge: $[eq(variables.Build.Reason, 'merge')]
-  version: $[if(variables.isMerge && eq(variables.system.pullRequest.targetBranch, 'dev'), variables['alphaVersionEnvVar'], $[if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), $[variables['betaVersionEnvVar'], if (variables.isMerge && eq(variables.system.targetBranch, 'master'),variables['releaseVersionEnvVar'],'')])])]
+  isTargetStaging: $[eq(variables.system.pullRequest.targetBranch, 'staging')]
+  isTargetProd: $[eq(variables.system.pullRequest.targetBranch, 'master')]
+  Version.Revision.Preview: $[counter(variables.Version.Revision.Preview)]
+  Version.Revision.Prod: $[counter(variables.Version.Revision.Prod)]
+  srcBranch: '$(variables.Build.SourceBranch)'
 
 steps:
 
-- task: NuGetToolInstaller@1
-  displayName: 'nuget install'
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK 2.1'
   inputs:
-    versionSpec: 
-    checkLatest: true
+    packageType: 'sdk'
+    version: '2.1.607'
 
-- task: NuGetCommand@2
-  displayName: 'nuget restore'
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK 2.2'
   inputs:
-    command: 'restore'
-    restoreSolution: '**/**/*.sln'
+    packageType: 'sdk'
+    version: '2.2.207'
+
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK 3.0'
+  inputs:
+    packageType: 'sdk'
+    version: '3.0.101'
+
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK 3.1'
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.100'
+
+- task: CmdLine@2
+  displayName: 'Install DNT'
+  inputs:
+    script: 'npm i -g dotnettools'
+
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet Tools'
+  inputs:
+    checkLatest: true
+    
+- task: CmdLine@2
+  displayName: 'Update project version revesion for preview'
+  condition: and(succeeded(),eq(variables['srcBranch'], 'refs/head/staging'))
+  inputs:
+    script: 'dnt bump-versions preview "preview$(Version.Revision.Preview)"'
+    failOnStderr: true
+    
+- task: CmdLine@2
+  displayName: 'Update project version revesion for release'
+  condition: and(succeeded(),eq(variables['srcBranch'], 'refs/head/master'))
+  inputs:
+    script: 'dnt bump-versions revision "$(Version.Revision.Prod)"'
+    failOnStderr: true
+    
+- task: DotNetCoreCLI@2
+  displayName: 'Build solution'
+  inputs:
+    command: 'build'
+    projects: '$(projects)'
+    arguments: '--configuration $(BuildConfiguration)'
     feedsToUse: 'select'
+    versioningScheme: 'off'
 
 - task: MSBuild@1
   displayName: 'build PR using msbuild'
   inputs:
-    solution: '**/*.sln'  
+    solution: '$(solution)'  
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
+    restoreNugetPackages: true # Optional
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables.isPR, true))
-
-- task: MSBuild@1
-  displayName: 'build merge using msbuild'
-  inputs:
-    solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(version)'    
-    msbuildArchitecture: 'x64'
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables.isMerge, true))
-
-- task: NuGetCommand@2
-  displayName: 'nuget setApiKey'
-  inputs:
-    command: 'custom'
-    arguments: 'setApiKey $(nugetCredential)'
-  condition: and(succeeded(), eq(variables.isMerge, true))
-
-- task: NuGetCommand@2
-  displayName: 'nuget push'
-  inputs:
-    command: 'push'
-    arguments: '-SkipIfAlreadyPublished -SkipDuplicate'
-    feedsToUse: 'config'    
-    externalFeedCredentials: '$(externalFeedCredentials)' 
-    publishFeedCredentials: '$(publishFeedCredentials)'    
-    packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nu*;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nu*'
-    nuGetFeedType: 'external'
-    publishVstsFeed: 'DevSkill.SSLCommerz.Core'
-    versioningScheme: 'byEnvVar'
-    versionEnvVar: '$(versionEnvVar)'
-    allowPackageConflicts: false
-  condition: and(succeeded(), eq(variables.isMergeBuildable, true))
