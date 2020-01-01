@@ -36,8 +36,6 @@ variables:
   Version.Revision.Preview: $[counter(variables.Version.Revision.Preview)]
   Version.Revision.Prod: $[counter(variables.Version.Revision.Prod)]
   srcBranch: '$(variables.Build.SourceBranch)'
-  isMergeDeployable: $[and(variables.isMerge, eq(variables.srcBranch, 'refs/head/master'))]
-  isMergeDeployableInStaging: $[and(variables.isMerge, eq(variables.srcBranch, 'refs/head/staging'))]
 
 steps:
 
@@ -89,14 +87,14 @@ steps:
     
 - task: CmdLine@2
   displayName: 'Update project version revesion for preview'
-  condition: $[eq(variables['isMergeDeployableInStaging'], true)]
+  condition: $[eq(variables['srcBranch'], 'refs/head/staging')]
   inputs:
     script: 'dnt bump-versions preview "preview$(Version.Revision.Preview)"'
     failOnStderr: true
     
 - task: CmdLine@2
   displayName: 'Update project version revesion for release'
-  condition: $[eq(variables['isMergeDeployable'], true)]
+  condition: $[eq(variables['srcBranch'], 'refs/head/master')]
   inputs:
     script: 'dnt bump-versions revision "$(Version.Revision.Prod)"'
     failOnStderr: true
