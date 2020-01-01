@@ -6,6 +6,6 @@ namespace DevSkill.SSLCommerz.Core.Services
 {
 	public interface ISSLCommerzService
 	{
-		Task<SSLCommerzSessionResponse> InitiateRequestAsync(SSLCommerzSessionRequest request);
+		Task<SSLCommerzPaymentInitiationResponse> InitiateRequestAsync(SSLCommerzPaymentInitiationRequest request);
 	}
 }

@@ -20,7 +20,7 @@ namespace DevSkill.SSLCommerz.Core.Services
 			_settingService = settingService;
 		}
 
-		public async Task<SSLCommerzSessionResponse> InitiateRequestAsync(SSLCommerzSessionRequest request)
+		public async Task<SSLCommerzPaymentInitiationResponse> InitiateRequestAsync(SSLCommerzPaymentInitiationRequest request)
 		{
 			var settings = _settingService.GetSettings();
 			var requestJson = request.ToString();
@@ -34,7 +34,7 @@ namespace DevSkill.SSLCommerz.Core.Services
 			var responseString = await response.Content.ReadAsStringAsync();
 
 			return JsonConvert
-				.DeserializeObject<SSLCommerzSessionResponse>(
+				.DeserializeObject<SSLCommerzPaymentInitiationResponse>(
 				responseString,
 				new JsonSerializerSettings()
 				{

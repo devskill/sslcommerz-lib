@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DevSkill.SSLCommerz.Core.Models
 {
-	public class SSLCommerzSessionResponse
+	public class SSLCommerzPaymentInitiationResponse
 	{
 		[StringLength(10)]
 		[JsonProperty("status")]
@@ -62,7 +62,7 @@ namespace DevSkill.SSLCommerz.Core.Models
 		{
 			var i = 0;
 			var sb = new StringBuilder();
-			var properties = typeof(SSLCommerzSessionResponse).GetProperties();
+			var properties = typeof(SSLCommerzPaymentInitiationResponse).GetProperties();
 			foreach (var p in properties)
 			{
 				var jsonPropertyAttribute = (JsonPropertyAttribute)Attribute.GetCustomAttribute(p, typeof(JsonPropertyAttribute));
