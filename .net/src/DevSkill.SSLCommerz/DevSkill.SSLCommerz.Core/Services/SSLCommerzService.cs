@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DevSkill.SSLCommerz.Core.Services
 {
-	internal class SSLCommerzService
+	public class SSLCommerzService
 		: ISSLCommerzService
 	{
 		private readonly HttpClient _httpClient;
