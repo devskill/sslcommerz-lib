@@ -35,7 +35,7 @@ variables:
   isTargetProd: $[eq(variables.system.pullRequest.targetBranch, 'master')]
   Version.Revision.Preview: $[counter(variables.Version.Revision.Preview)]
   Version.Revision.Prod: $[counter(variables.Version.Revision.Prod)]
-  srcBranch: $(Build.SourceBranch)
+  srcBranch: $(variables.Build.SourceBranch)
   isMergeDeployableInStaging: $[and(and(succeeded(), eq(variables.isMerge, true)),and(succeeded(), eq(srcBranch, 'refs/head/staging')))]
   isMergeDeployableInProd: $[and(and(succeeded(), eq(variables.isMerge, true)),and(succeeded(), eq(srcBranch, 'refs/head/master')))]
   isBuildable: $[or(eq(variables.isPR, true), eq(variables.isMerge, true))]
