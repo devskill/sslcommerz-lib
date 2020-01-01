@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SSLCommerzSample.Models
+namespace DevSkill.SSLCommerz.Core.Models
 {
 	public class PaymentChannel
 	{

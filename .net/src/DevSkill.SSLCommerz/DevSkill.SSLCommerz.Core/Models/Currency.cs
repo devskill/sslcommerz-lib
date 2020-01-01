@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DevSkill.SSLCommerz.Core.Models
+﻿namespace DevSkill.SSLCommerz.Core.Models
 {
 	public static class Currency
 	{
