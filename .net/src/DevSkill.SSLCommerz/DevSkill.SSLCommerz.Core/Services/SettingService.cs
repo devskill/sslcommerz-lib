@@ -10,7 +10,7 @@ namespace DevSkill.SSLCommerz.Core.Services
 		{
 			return _settings ?? throw new NullReferenceException();
 		}
-		public void Settings(SSLCommerzSettings settings)
+		public void SetSettings(SSLCommerzSettings settings)
 			=> _settings = settings;
 	}
 }

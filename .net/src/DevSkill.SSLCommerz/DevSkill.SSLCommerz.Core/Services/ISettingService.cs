@@ -3,6 +3,6 @@
 	public interface ISettingService
 	{
 		SSLCommerzSettings GetSettings();
-		void Settings(SSLCommerzSettings settings);
+		void SetSettings(SSLCommerzSettings settings);
 	}
 }
