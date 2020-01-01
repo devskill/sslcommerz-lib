@@ -1,0 +1,7 @@
+{
+  "solution": "DevSkill.SSLCommerz.sln",
+  "mappings": {
+    "DevSkill.SSLCommerz.Core": "./DevSkill.SSLCommerz.Core/DevSkill.SSLCommerz.Core.csproj"
+  },
+  "restore": []
+}
