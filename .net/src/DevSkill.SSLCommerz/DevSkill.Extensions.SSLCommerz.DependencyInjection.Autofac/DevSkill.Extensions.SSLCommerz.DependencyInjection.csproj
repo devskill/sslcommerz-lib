@@ -13,8 +13,8 @@
 		<Product>Devskill.SSLCommerz.Core</Product>
 		<PackageId>Devskill.SSLCommerz.Core</PackageId>
 		<PackageVersion>$(Version)</PackageVersion>
-		<AssemblyVersion>1.0.0.12</AssemblyVersion>
-		<FileVersion>1.0.0.12</FileVersion>
+		<AssemblyVersion>1.0.0.14</AssemblyVersion>
+		<FileVersion>1.0.0.14</FileVersion>
 		<Version>1.0.0.1-beta2</Version>
 	</PropertyGroup>
 	<ItemGroup>
