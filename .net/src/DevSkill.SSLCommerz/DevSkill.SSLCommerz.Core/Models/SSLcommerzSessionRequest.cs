@@ -1,14 +1,10 @@
-﻿using DevSkill.SSLCommerz.Core.Models;
-
-using Newtonsoft.Json;
-
-using SSLCommerzSample.Core;
+﻿using Newtonsoft.Json;
 
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace SSLCommerzSample.Models
+namespace DevSkill.SSLCommerz.Core.Models
 {
 	public class SSLCommerzSessionRequest
 	{

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SSLCommerzSample.Models
+namespace DevSkill.SSLCommerz.Core.Models
 {
 	public class Gateways
 	{
