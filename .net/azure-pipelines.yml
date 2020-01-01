@@ -6,13 +6,18 @@
 trigger:
   batch : true
   branches:
-    include:      
-     - *
+    include:    
+     - azure*    
+     - feature/*   
+     - feature/*/*
+     - staging
+     - master
           
 PR:
   autoCancel: false
   branches:
     include:
+     - azure*
      - staging
      - master
 
