@@ -19,47 +19,6 @@ variables:
 
 steps:
 
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '2.1'
-
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '2.2'
-
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '3.1.0'
-
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '3.0.0'
-
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '3.1.0'
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet restore *.csproj'
-  inputs:
-    command: 'restore'
-    arguments: '-c $(buildConfiguration)'
-    projects: '**/**/*.csproj'
-    workingDirectory: '.net/src'
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build *.csproj'
-  inputs:
-    command: 'build'
-    arguments: '-c $(buildConfiguration)'
-    projects: '**/**/*.csproj'
-    workingDirectory: '.net/src'
-
 - task: NuGetToolInstaller@1
   displayName: 'nuget install'
   inputs:
@@ -81,7 +40,7 @@ steps:
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev'))
+  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'dev'))
 
 - task: MSBuild@1
   displayName: 'msbuild *.csproj staging'
@@ -91,7 +50,7 @@ steps:
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/staging'))
+  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'staging'))
 
 - task: MSBuild@1
   displayName: 'msbuild *.csproj master'
@@ -101,7 +60,14 @@ steps:
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'master'))
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
+    vstsFeed: 'add2a836-0d14-4e8e-b68d-d89bfa93c037'
 
 - task: MSBuild@1
   displayName: 'msbuild *.csproj release'
@@ -110,13 +76,14 @@ steps:
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(failed(), eq(variables['Build.Reason'], 'PullRequest'))
 
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
   inputs:
     command: 'custom'
     arguments: 'setApiKey $(nugetCredential)'
+  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
