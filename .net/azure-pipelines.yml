@@ -4,9 +4,12 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
-- staging
 - dev
+- staging
+- master
+PR:
+- staging
+- master
 
 pool:
   vmImage: 'windows-latest'
@@ -16,53 +19,120 @@ variables:
   projects: '**/**/*.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  isPR: $[eq(variables.Build.Reason, 'PullRequest')]
-  isMerge: $[eq(variables.Build.Reason, 'merge')]
-  version: $[if(variables.isMerge && eq(variables.system.pullRequest.targetBranch, 'dev'), variables['alphaVersionEnvVar'], $[if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), $[variables['betaVersionEnvVar'], if (variables.isMerge && eq(variables.system.targetBranch, 'master'),variables['releaseVersionEnvVar'],'')])])]
+  isPR: $[eq(Build.Reason, 'PullRequest')]
+  isMerge: $[eq(Build.Reason, 'merge')]
+  isTargetStaging: $[eq(PullRequest.targetBranch, 'staging')]
+  isTargetProd: $[eq(PullRequest.targetBranch, 'master')]
+  Version.Revision.Preview: $[counter(Version.Revision.Previrew)]
+  Version.Revision.Prod: $[counter(Version.Revision.Prod)]
+  srcBranch: $(Build.SourceBranch)
+  isMergeDeployableInStaging: $[and(and(succeeded(), eq(variables.isMerge, true)),and(succeeded(), eq(srcBranch, 'refs/head/staging')))]
+  isMergeDeployableInProd: $[and(and(succeeded(), eq(variables.isMerge, true)),and(succeeded(), eq(srcBranch, 'refs/head/master')))]
+  isBuildable: $[or(eq(variables.isPR, true), eq(variables.isMerge, true))]
 
 steps:
 
-- task: NuGetToolInstaller@1
-  displayName: 'nuget install'
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK 2.1'
+  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
   inputs:
-    versionSpec: 
+    packageType: 'sdk'
+    version: '2.1.607'
+
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK 2.2'
+  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.207'
+
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK 3.0'
+  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  inputs:
+    packageType: 'sdk'
+    version: '3.0.101'
+
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK 3.1'
+  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.100'
+
+- task: CmdLine@2
+  displayName: 'Install DNT'
+  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  inputs:
+    script: 'npm i -g dotnettools'
+
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet Tools'
+  condition: $[and(succeeded(), eq(variables['isBuildable'], true))]
+  inputs:
     checkLatest: true
 
 - task: NuGetCommand@2
-  displayName: 'nuget restore'
+  displayName: 'Restore packages for solution'
+  condition: $[and(succeeded(), eq(variables['isBuildable'], true))]
   inputs:
     command: 'restore'
     restoreSolution: '**/**/*.sln'
     feedsToUse: 'select'
+    
+- task: CmdLine@2
+  displayName: 'Update project version revesion for preview'
+  condition: $[and(succeeded(), eq(variables['isMergeDeployableInStaging'], true))]
+  inputs:
+    script: 'dnt bump-versions preview "preview$(Version.Revision.Preview)"'
+    failOnStderr: true
+    
+- task: CmdLine@2
+  displayName: 'Update project version revesion for release'
+  condition: $[and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  inputs:
+    script: 'dnt bump-versions revision "$(Version.Revision.Prod)"'
+    failOnStderr: true
+
+- task: MSBuild@1
+  displayName: 'build merge using msbuild on staging'
+  condition: $[and(succeeded(), eq(variables['isMergeDeployableInStaging'], true))]
+  inputs:
+    solution: '$(solution)'  
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(Version.Major).$(Version.Minor).$(Version.Patch).$(Version.Revesion.Staging)'
+    msbuildArchitecture: 'x64'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+
+- task: MSBuild@1
+  displayName: 'build merge using msbuild on release'
+  condition: $[and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  inputs:
+    solution: '$(solution)'  
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(Version.Major).$(Version.Minor).$(Version.Patch).$(Version.Revesion.Prod)'
+    msbuildArchitecture: 'x64'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
 
 - task: MSBuild@1
   displayName: 'build PR using msbuild'
+  condition: $[and(succeeded(), eq(variables['isBuildable'], true))]
   inputs:
-    solution: '**/*.sln'  
+    solution: '$(solution)'  
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables.isPR, true))
-
-- task: MSBuild@1
-  displayName: 'build merge using msbuild'
-  inputs:
-    solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(version)'    
-    msbuildArchitecture: 'x64'
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables.isMerge, true))
 
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
+  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     command: 'custom'
     arguments: 'setApiKey $(nugetCredential)'
-  condition: and(succeeded(), eq(variables.isMerge, true))
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
+  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     command: 'push'
     arguments: '-SkipIfAlreadyPublished -SkipDuplicate'
@@ -72,7 +142,5 @@ steps:
     packagesToPush: '.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.nu*;!.net/src/DevSkill.SSLCommerz/DevSkill.SSLCommerz.Core/bin/Release/*.symbols.nu*'
     nuGetFeedType: 'external'
     publishVstsFeed: 'DevSkill.SSLCommerz.Core'
-    versioningScheme: 'byEnvVar'
-    versionEnvVar: '$(versionEnvVar)'
+    versioningScheme: 'off'
     allowPackageConflicts: false
-  condition: and(succeeded(), eq(variables.isMergeBuildable, true))
