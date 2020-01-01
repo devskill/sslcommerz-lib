@@ -16,6 +16,9 @@ variables:
   projects: '**/**/*.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  isPR: $[eq(variables.Build.Reason, 'PullRequest')]
+  isMerge: $[eq(variables.Build.Reason, 'merge')]
+  version: $[if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), variables['alphaVersionEnvVar'], if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), variables['betaVersionEnvVar'], if (variables.isMerge && eq(variables.system.targetBranch, 'master'),variables['releaseVersionEnvVar'],'')))]
 
 steps:
 
@@ -33,57 +36,30 @@ steps:
     feedsToUse: 'select'
 
 - task: MSBuild@1
-  displayName: 'msbuild *.csproj dev'
+  displayName: 'build PR using msbuild'
   inputs:
-    solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(alphaVersionEnvVar)'    
+    solution: '**/*.sln'  
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'dev'))
+  condition: and(succeeded(), eq(variables.isPR, true))
 
 - task: MSBuild@1
-  displayName: 'msbuild *.csproj staging'
+  displayName: 'build merge using msbuild'
   inputs:
     solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(stagingVersionEnvVar)'    
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(version)'    
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'staging'))
-
-- task: MSBuild@1
-  displayName: 'msbuild *.csproj master'
-  inputs:
-    solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(releaseVersionEnvVar)'    
-    msbuildArchitecture: 'x64'
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'master'))
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'restore'
-    restoreSolution: '**/*.sln'
-    feedsToUse: 'select'
-    vstsFeed: 'add2a836-0d14-4e8e-b68d-d89bfa93c037'
-
-- task: MSBuild@1
-  displayName: 'msbuild *.csproj release'
-  inputs:
-    solution: '**/*.sln'
-    msbuildArchitecture: 'x64'
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
-  condition: and(failed(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded(), eq(variables.isMerge, true))
 
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
   inputs:
     command: 'custom'
     arguments: 'setApiKey $(nugetCredential)'
-  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded(), eq(variables.isMerge, true))
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
@@ -99,4 +75,4 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: '$(versionEnvVar)'
     allowPackageConflicts: false
-  condition: and(failed(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded(), eq(variables.isMergeBuildable, true))
