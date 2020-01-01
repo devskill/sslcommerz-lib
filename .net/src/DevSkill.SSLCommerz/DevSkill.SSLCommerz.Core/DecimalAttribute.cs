@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SSLCommerzSample.Core
+namespace DevSkill.SSLCommerz.Core
 {
 	public class DecimalAttribute 
 		: RegularExpressionAttribute
