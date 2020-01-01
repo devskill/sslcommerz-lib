@@ -72,13 +72,6 @@ steps:
   displayName: 'Install NuGet Tools'
   inputs:
     checkLatest: true
-
-- task: NuGetCommand@2
-  displayName: 'Restore packages for solution'
-  inputs:
-    command: 'restore'
-    restoreSolution: '**/**/*.sln'
-    feedsToUse: 'select'
     
 - task: CmdLine@2
   displayName: 'Update project version revesion for preview'
@@ -100,4 +93,5 @@ steps:
     solution: '$(solution)'  
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
+    restoreNugetPackages: true # Optional
     configuration: '$(buildConfiguration)'
