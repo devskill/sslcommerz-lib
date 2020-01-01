@@ -16,8 +16,10 @@ variables:
   projects: '**/**/*.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
-  isMerge: $[eq(variables['Build.Reason'], 'merge')]
+  isPR: $[eq(variables.Build.Reason, 'PullRequest')]
+  isMerge: $[eq(variables.Build.Reason, 'merge')]
+  version: $[if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), variables['alphaVersionEnvVar'], if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), variables['betaVersionEnvVar'], if (variables.isMerge && eq(variables.system.targetBranch, 'master'),variables['releaseVersionEnvVar'],'')))]
+
 steps:
 
 - task: NuGetToolInstaller@1
@@ -46,7 +48,7 @@ steps:
   displayName: 'build merge using msbuild'
   inputs:
     solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(alphaVersionEnvVar)'    
+    msbuildArguments: '-t:Pack -p:PackageVersion=$(version)'    
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
