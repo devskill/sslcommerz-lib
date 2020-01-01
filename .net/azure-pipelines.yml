@@ -18,7 +18,7 @@ variables:
   buildConfiguration: 'Release'
   isPR: $[eq(variables.Build.Reason, 'PullRequest')]
   isMerge: $[eq(variables.Build.Reason, 'merge')]
-  version: $[if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), variables['alphaVersionEnvVar'], if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), variables['betaVersionEnvVar'], if (variables.isMerge && eq(variables.system.targetBranch, 'master'),variables['releaseVersionEnvVar'],'')))]
+  version: $[if(variables.isMerge && eq(variables.system.pullRequest.targetBranch, 'dev'), variables['alphaVersionEnvVar'], $[if(variables.isMerge && eq(variables['system.PullRequest.targetBranch']), $[variables['betaVersionEnvVar'], if (variables.isMerge && eq(variables.system.targetBranch, 'master'),variables['releaseVersionEnvVar'],'')])])]
 
 steps:
 
