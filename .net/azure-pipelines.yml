@@ -36,9 +36,9 @@ variables:
   Version.Revision.Preview: $[counter(variables.Version.Revision.Preview)]
   Version.Revision.Prod: $[counter(variables.Version.Revision.Prod)]
   srcBranch: $(variables.Build.SourceBranch)
-  isMergeDeployableInStaging: $[and(eq(variables.isMerge, true), eq(variables.srcBranch, 'refs/head/staging'))]
-  isMergeDeployableInProd: $[and(eq(variables.isMerge, true), eq(variables.srcBranch, 'refs/head/master'))]
-  isBuildable: $[or(eq(variables.isPR, true), eq(variables.isMerge, true))]
+  isMergeDeployableInStaging: $[and(and(succeeded(),variables.isMerge), eq(variables.srcBranch, 'refs/head/staging')))
+  isMergeDeployableInProd: $[and(eq(variables.isMerge, {true}), eq(variables.srcBranch, 'refs/head/master')))
+  isBuildable: $[and(succeeded(), or(eq(variables.isPR, {true}), eq(variables.isMerge, true)))]
 
 steps:
 
