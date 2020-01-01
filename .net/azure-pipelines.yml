@@ -4,12 +4,17 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- dev
-- staging
-- master
+  batch : true
+  branches:
+    include:      
+     - *
+          
 PR:
-- staging
-- master
+  autoCancel: false
+  branches:
+    include:
+     - staging
+     - master
 
 pool:
   vmImage: 'windows-latest'
