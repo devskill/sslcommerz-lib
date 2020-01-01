@@ -35,56 +35,55 @@ variables:
   isTargetProd: $[eq(variables.system.pullRequest.targetBranch, 'master')]
   Version.Revision.Preview: $[counter(variables.Version.Revision.Preview)]
   Version.Revision.Prod: $[counter(variables.Version.Revision.Prod)]
-  srcBranch: $(variables.Build.SourceBranch)
-  isMergeDeployableInStaging: $[and(and(succeeded(),variables.isMerge), eq(variables.srcBranch, 'refs/head/staging')))
-  isMergeDeployableInProd: $[and(eq(variables.isMerge, {true}), eq(variables.srcBranch, 'refs/head/master')))
-  isBuildable: $[and(succeeded(), or(eq(variables.isPR, {true}), eq(variables.isMerge, true)))]
+  srcBranch: '$(variables.Build.SourceBranch)'
+  isMergeDeployable: $[and(eq(variables.isMerge, true), eq(variables.srcBranch, 'refs/head/master'))]
+  isBuildable: $[and(succeeded(), $(if(variables.isPR || variables.isMerge, true, false)))]
 
 steps:
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK 2.1'
-  condition: $[or(eq(variables['isMergeDeployableInStaging'], true), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[eq(variables['isBuildable'], true)]
   inputs:
     packageType: 'sdk'
     version: '2.1.607'
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK 2.2'
-  condition: $[or(eq(variables['isMergeDeployableInStaging'], true), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[eq(variables['isBuildable'], true)]
   inputs:
     packageType: 'sdk'
     version: '2.2.207'
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK 3.0'
-  condition: $[or(eq(variables['isMergeDeployableInStaging'], true), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[eq(variables['isBuildable'], true)]
   inputs:
     packageType: 'sdk'
     version: '3.0.101'
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK 3.1'
-  condition: $[or(eq(variables['isMergeDeployableInStaging'], true),eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[eq(variables['isBuildable'], true)]
   inputs:
     packageType: 'sdk'
     version: '3.1.100'
 
 - task: CmdLine@2
   displayName: 'Install DNT'
-  condition: $[or(eq(variables['isMergeDeployableInStaging'], true),eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[eq(variables['isBuildable'], true)]
   inputs:
     script: 'npm i -g dotnettools'
 
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet Tools'
-  condition: $[and(succeeded(), eq(variables['isBuildable'], true))]
+  condition: $[eq(variables['isBuildable'], true)]
   inputs:
     checkLatest: true
 
 - task: NuGetCommand@2
   displayName: 'Restore packages for solution'
-  condition: $[and(succeeded(), eq(variables['isBuildable'], true))]
+  condition: $[eq(variables['isBuildable'], true)]
   inputs:
     command: 'restore'
     restoreSolution: '**/**/*.sln'
