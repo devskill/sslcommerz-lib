@@ -1,4 +1,4 @@
-﻿namespace SSLCommerzSample.Models
+﻿namespace DevSkill.SSLCommerz.Core.Models
 {
 	public static class ProductProfile
 	{

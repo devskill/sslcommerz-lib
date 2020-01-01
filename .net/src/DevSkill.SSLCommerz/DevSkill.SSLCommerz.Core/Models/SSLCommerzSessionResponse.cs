@@ -1,14 +1,13 @@
-﻿using DevSkill.SSLCommerz.Core.Models;
-
+﻿
 using Newtonsoft.Json;
 
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace SSLCommerzSample.Models
+namespace DevSkill.SSLCommerz.Core.Models
 {
-	public class SSLCommerzSessionResponse
+	public class SSLCommerzPaymentInitiationResponse
 	{
 		[StringLength(10)]
 		[JsonProperty("status")]
@@ -62,7 +61,7 @@ namespace SSLCommerzSample.Models
 		{
 			var i = 0;
 			var sb = new StringBuilder();
-			var properties = typeof(SSLCommerzSessionResponse).GetProperties();
+			var properties = typeof(SSLCommerzPaymentInitiationResponse).GetProperties();
 			foreach (var p in properties)
 			{
 				var jsonPropertyAttribute = (JsonPropertyAttribute)Attribute.GetCustomAttribute(p, typeof(JsonPropertyAttribute));

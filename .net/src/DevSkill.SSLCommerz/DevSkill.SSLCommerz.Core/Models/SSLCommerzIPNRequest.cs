@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-using SSLCommerzSample.Core;
-
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SSLCommerzSample.Models
+namespace DevSkill.SSLCommerz.Core.Models
 {
 	public class SSLCommerzIPNRequest
 	{

@@ -1,16 +1,12 @@
-﻿using DevSkill.SSLCommerz.Core.Models;
-
-using Newtonsoft.Json;
-
-using SSLCommerzSample.Core;
+﻿using Newtonsoft.Json;
 
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace SSLCommerzSample.Models
+namespace DevSkill.SSLCommerz.Core.Models
 {
-	public class SSLCommerzSessionRequest
+	public class SSLCommerzPaymentInitiationRequest
 	{
 		#region integration info
 		[Required]
@@ -249,7 +245,7 @@ namespace SSLCommerzSample.Models
 		{
 			var i = 0;
 			var sb = new StringBuilder();
-			var properties = typeof(SSLCommerzSessionRequest).GetProperties();
+			var properties = typeof(SSLCommerzPaymentInitiationRequest).GetProperties();
 			foreach (var p in properties)
 			{
 				var jsonPropertyAttribute = (JsonPropertyAttribute)Attribute.GetCustomAttribute(p, typeof(JsonPropertyAttribute));
