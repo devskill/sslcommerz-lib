@@ -82,14 +82,14 @@ steps:
     
 - task: CmdLine@2
   displayName: 'Update project version revesion for preview'
-  condition: $[eq(variables['srcBranch'], 'refs/head/staging')]
+  condition: and(succeeded(),eq(variables['srcBranch'], 'refs/head/staging'))
   inputs:
     script: 'dnt bump-versions preview "preview$(Version.Revision.Preview)"'
     failOnStderr: true
     
 - task: CmdLine@2
   displayName: 'Update project version revesion for release'
-  condition: $[eq(variables['srcBranch'], 'refs/head/master')]
+  condition: and(succeeded(),eq(variables['srcBranch'], 'refs/head/master'))
   inputs:
     script: 'dnt bump-versions revision "$(Version.Revision.Prod)"'
     failOnStderr: true
