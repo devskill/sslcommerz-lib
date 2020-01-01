@@ -44,35 +44,35 @@ steps:
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK 2.1'
-  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[or(eq(variables['isMergeDeployableInStaging'], true), eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     packageType: 'sdk'
     version: '2.1.607'
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK 2.2'
-  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[or(eq(variables['isMergeDeployableInStaging'], true), eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     packageType: 'sdk'
     version: '2.2.207'
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK 3.0'
-  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[or(eq(variables['isMergeDeployableInStaging'], true), eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     packageType: 'sdk'
     version: '3.0.101'
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK 3.1'
-  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[or(eq(variables['isMergeDeployableInStaging'], true),eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     packageType: 'sdk'
     version: '3.1.100'
 
 - task: CmdLine@2
   displayName: 'Install DNT'
-  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[or(eq(variables['isMergeDeployableInStaging'], true),eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     script: 'npm i -g dotnettools'
 
@@ -135,14 +135,14 @@ steps:
 
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
-  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[or(eq(variables['isMergeDeployableInStaging'], true), eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     command: 'custom'
     arguments: 'setApiKey $(nugetCredential)'
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
-  condition: $[or(and(succeeded(), eq(variables['isMergeDeployableInStaging'], true), and(succeeded(), eq(variables['isMergeDeployableInProd'], true))]
+  condition: $[or(eq(variables['isMergeDeployableInStaging'], true), eq(variables['isMergeDeployableInProd'], true))]
   inputs:
     command: 'push'
     arguments: '-SkipIfAlreadyPublished -SkipDuplicate'
