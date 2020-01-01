@@ -88,7 +88,7 @@ steps:
     failOnStderr: true
     
 - task: DotNetCoreCLI@2
-  displayName: 'Build solution'
+  displayName: 'Build solution using dotnet cli'
   inputs:
     command: 'build'
     projects: '$(projects)'
@@ -97,7 +97,7 @@ steps:
     versioningScheme: 'off'
 
 - task: MSBuild@1
-  displayName: 'build PR using msbuild'
+  displayName: 'Build solution using msbuild'
   inputs:
     solution: '$(solution)'  
     msbuildArchitecture: 'x64'
