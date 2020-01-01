@@ -86,6 +86,15 @@ steps:
   inputs:
     script: 'dnt bump-versions revision "$(Version.Revision.Prod)"'
     failOnStderr: true
+    
+- task: DotNetCoreCLI@2
+  displayName: 'Build solution'
+  inputs:
+    command: 'build'
+    projects: '$(projects)'
+    arguments: '--configuration $(BuildConfiguration)'
+    feedsToUse: 'select'
+    versioningScheme: 'off'
 
 - task: MSBuild@1
   displayName: 'build PR using msbuild'
