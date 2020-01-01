@@ -7,7 +7,7 @@
 		public string PaymentValidationUrl { get; internal set; }
 		public int Version { get; internal set; }
 
-		public SSLCommerzApiSettings ApiSettings { get; internal set; }
-		public SSLCommerzUrlSettings CallbackUrlSettings { get; internal set; }
+		public SSLCommerzApiSettings ApiSettings { get; internal set; } = new SSLCommerzApiSettings();
+		public SSLCommerzUrlSettings CallbackUrlSettings { get; internal set; } = new SSLCommerzUrlSettings();
 	}
 }
