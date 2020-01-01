@@ -16,7 +16,8 @@ variables:
   projects: '**/**/*.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-
+  isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
+  isMerge: $[eq(variables['Build.Reason'], 'merge')]
 steps:
 
 - task: NuGetToolInstaller@1
@@ -33,57 +34,30 @@ steps:
     feedsToUse: 'select'
 
 - task: MSBuild@1
-  displayName: 'msbuild *.csproj dev'
+  displayName: 'build PR using msbuild'
+  inputs:
+    solution: '**/*.sln'  
+    msbuildArchitecture: 'x64'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+  condition: and(succeeded(), eq(variables.isPR, true))
+
+- task: MSBuild@1
+  displayName: 'build merge using msbuild'
   inputs:
     solution: '**/*.sln'
     msbuildArguments: '-t:Pack -p:PackageVersion=$(alphaVersionEnvVar)'    
     msbuildArchitecture: 'x64'
     platform: 'Any CPU'
     configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'dev'))
-
-- task: MSBuild@1
-  displayName: 'msbuild *.csproj staging'
-  inputs:
-    solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(stagingVersionEnvVar)'    
-    msbuildArchitecture: 'x64'
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'staging'))
-
-- task: MSBuild@1
-  displayName: 'msbuild *.csproj master'
-  inputs:
-    solution: '**/*.sln'
-    msbuildArguments: '-t:Pack -p:PackageVersion=$(releaseVersionEnvVar)'    
-    msbuildArchitecture: 'x64'
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
-  condition: and(succeeded(), eq(variables['system.pullRequest.targetBranch'], 'master'))
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'restore'
-    restoreSolution: '**/*.sln'
-    feedsToUse: 'select'
-    vstsFeed: 'add2a836-0d14-4e8e-b68d-d89bfa93c037'
-
-- task: MSBuild@1
-  displayName: 'msbuild *.csproj release'
-  inputs:
-    solution: '**/*.sln'
-    msbuildArchitecture: 'x64'
-    platform: 'Any CPU'
-    configuration: '$(buildConfiguration)'
-  condition: and(failed(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded(), eq(variables.isMerge, true))
 
 - task: NuGetCommand@2
   displayName: 'nuget setApiKey'
   inputs:
     command: 'custom'
     arguments: 'setApiKey $(nugetCredential)'
-  condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded(), eq(variables.isMerge, true))
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
@@ -99,4 +73,4 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: '$(versionEnvVar)'
     allowPackageConflicts: false
-  condition: and(failed(), eq(variables['Build.Reason'], 'PullRequest'))
+  condition: and(succeeded(), eq(variables.isMergeBuildable, true))
