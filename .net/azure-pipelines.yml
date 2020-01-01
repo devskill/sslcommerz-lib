@@ -7,19 +7,19 @@ trigger:
   batch : true
   branches:
     include:    
-     - azure*    
-     - feature/*   
-     - feature/*/*
-     - staging
-     - master
+      - azure*    
+      - feature/*   
+      - feature/*/*
+      - staging
+      - master
           
-PR:
+pr:
   autoCancel: false
   branches:
     include:
-     - azure*
-     - staging
-     - master
+      - azure*
+      - staging
+      - master
 
 pool:
   vmImage: 'windows-latest'
