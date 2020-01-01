@@ -19,6 +19,31 @@ variables:
 
 steps:
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.1'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.2'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.0'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.0.0'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.0'
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore *.csproj'
   inputs:
