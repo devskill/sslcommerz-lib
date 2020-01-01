@@ -29,10 +29,10 @@ variables:
   projects: '**/**/*.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  isPR: $[eq(Build.Reason, 'PullRequest')]
-  isMerge: $[eq(Build.Reason, 'merge')]
-  isTargetStaging: $[eq(PullRequest.targetBranch, 'staging')]
-  isTargetProd: $[eq(PullRequest.targetBranch, 'master')]
+  isPR: $[eq(variables.Build.Reason, 'PullRequest')]
+  isMerge: $[eq(variables.Build.Reason, 'merge')]
+  isTargetStaging: $[eq(variables.system.pullRequest.targetBranch, 'staging')]
+  isTargetProd: $[eq(variables.system.pullRequest.targetBranch, 'master')]
   Version.Revision.Preview: $[counter(Version.Revision.Previrew)]
   Version.Revision.Prod: $[counter(Version.Revision.Prod)]
   srcBranch: $(Build.SourceBranch)
