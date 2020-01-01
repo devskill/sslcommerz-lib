@@ -17,12 +17,13 @@
     <FileVersion>$(Version)</FileVersion>
     <Version>1.0.0.0-beta2</Version>
   </PropertyGroup>
-  <ItemGroup>
-  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0' Or '$(TargetFramework)'=='netstandard2.1'">
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="obj\" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
