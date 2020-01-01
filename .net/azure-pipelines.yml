@@ -107,7 +107,7 @@ steps:
     
 - task: CopyFiles@2
   displayName: 'Copy packages for staging'
-  condition: and(eq(variables['isMerge'], 'true'), eq(variables['srcBranch', 'ref/head/staging'))
+  condition: and(eq(variables['isMerge'], 'true'), eq(variables['srcBranch'], 'ref/head/staging'))
   inputs:
     Contents: '**/*.*preview*.nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
