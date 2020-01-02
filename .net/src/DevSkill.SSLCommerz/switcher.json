@@ -1,7 +1,8 @@
 {
-  "solution": "DevSkill.SSLCommerz.sln",
-  "mappings": {
-    "DevSkill.SSLCommerz.Core": "./DevSkill.SSLCommerz.Core/DevSkill.SSLCommerz.Core.csproj"
-  },
-  "restore": []
+	"solution": "DevSkill.SSLCommerz.sln",
+	"mappings": {
+		"DevSkill.SSLCommerz.Core": "./DevSkill.SSLCommerz.Core/DevSkill.SSLCommerz.Core.csproj",
+		"DevSkill.Extensions.SSLCommerz.DependencyInjection": "./DevSkill.SSLCommerz.Core/DevSkill.Extensions.SSLCommerz.DependencyInjection.csproj"
+	},
+	"restore": []
 }
