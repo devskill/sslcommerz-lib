@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		switcher.json = switcher.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevSkill.Extensions.SSLCommerz.DependencyInjection", "DevSkill.Extensions.SSLCommerz.DependencyInjection.Autofac\DevSkill.Extensions.SSLCommerz.DependencyInjection.csproj", "{FE016EBA-68E2-47B2-A611-DF08528E6E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevSkill.Extensions.SSLCommerz.DependencyInjection", "DevSkill.Extensions.SSLCommerz.DependencyInjection\DevSkill.Extensions.SSLCommerz.DependencyInjection.csproj", "{F3F3C322-2FD3-4302-9087-1CFB51632ADA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +22,10 @@ Global
 		{0FE9A1BE-2591-42DD-9980-066042C264CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FE9A1BE-2591-42DD-9980-066042C264CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FE9A1BE-2591-42DD-9980-066042C264CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE016EBA-68E2-47B2-A611-DF08528E6E05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE016EBA-68E2-47B2-A611-DF08528E6E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE016EBA-68E2-47B2-A611-DF08528E6E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE016EBA-68E2-47B2-A611-DF08528E6E05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3F3C322-2FD3-4302-9087-1CFB51632ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3F3C322-2FD3-4302-9087-1CFB51632ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3F3C322-2FD3-4302-9087-1CFB51632ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3F3C322-2FD3-4302-9087-1CFB51632ADA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
