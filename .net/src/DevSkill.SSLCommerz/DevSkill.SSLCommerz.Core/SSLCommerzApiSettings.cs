@@ -2,7 +2,7 @@
 {
 	public class SSLCommerzApiSettings
 	{
-		public string StoreId { get; internal set; }
-		public string StorePassword { get; internal set; }
+		public string StoreId { get; set; }
+		public string StorePassword { get; set; }
 	}
 }

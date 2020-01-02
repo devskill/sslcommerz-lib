@@ -2,10 +2,16 @@
 
 namespace DevSkill.SSLCommerz.Core.Services
 {
-	internal class SettingService
+	public class SettingService
 		: ISettingService
 	{
 		private SSLCommerzSettings _settings;
+
+		public SettingService(SSLCommerzSettings settings)
+		{
+			_settings = settings;
+		}
+
 		public SSLCommerzSettings GetSettings()
 		{
 			return _settings ?? throw new NullReferenceException();

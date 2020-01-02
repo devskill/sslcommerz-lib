@@ -6,9 +6,9 @@ namespace DevSkill.SSLCommerz.Core
 {
 	public class SSLCommerzUrlSettings
 	{
-		public string SuccessUrl { get; internal set; }
-		public string FailUrl { get; internal set; }
-		public string CancelUrl { get; internal set; }
-		public string IpnUrl { get; internal set; }
+		public string SuccessUrl { get; set; }
+		public string FailUrl { get; set; }
+		public string CancelUrl { get; set; }
+		public string IpnUrl { get; set; }
 	}
 }
