@@ -11,6 +11,6 @@ namespace DevSkill.Extensions.SSLCommerz.DependencyInjection
 			this ContainerBuilder cb,
 			SSLCommerzSettings settings
 			)
-			=> cb.RegisterModule(new SSLCommerzModule(settings));
+			=> cb.RegisterModule(new SSLCommerzModule(settings, 4));
 	}
 }

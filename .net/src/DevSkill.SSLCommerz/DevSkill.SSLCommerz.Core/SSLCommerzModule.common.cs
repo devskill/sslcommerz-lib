@@ -3,19 +3,26 @@
 using DevSkill.SSLCommerz.Core;
 using DevSkill.SSLCommerz.Core.Services;
 
+using System;
 using System.Net.Http;
 
 namespace DevSkill.Extensions.SSLCommerz.DependencyInjection
 {
-	internal class SSLCommerzModule
+	public class SSLCommerzModule
 		: Module
 	{
 		private readonly SSLCommerzSettings _settings;
 
-		public SSLCommerzModule(SSLCommerzSettings settings)
+		public SSLCommerzModule(
+			SSLCommerzSettings settings,
+			int version
+		)
 			: base()
 		{
 			_settings = settings;
+			if (version != 4)
+				throw new ArgumentOutOfRangeException(nameof(version), "Only API version 4 is supperted");
+			_settings.Version = version;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -29,7 +36,7 @@ namespace DevSkill.Extensions.SSLCommerz.DependencyInjection
 				.Register(c =>
 				{
 					var client = new HttpClient();
-					client.BaseAddress = new System.Uri(_settings.BaseUrl);
+					client.BaseAddress = new Uri(_settings.BaseUrl);
 					return client;
 				})
 				.AsSelf()

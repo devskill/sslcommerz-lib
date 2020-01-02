@@ -2,13 +2,19 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;net45;net46;</TargetFrameworks>
+		<PackageVersion>$(Version)</PackageVersion>
 		<AssemblyVersion>1.0.0.5</AssemblyVersion>
 		<FileVersion>1.0.0.5</FileVersion>
+		<Version>1.0.0.5-preview3</Version>
 		<EnableDefaultContentItems>false</EnableDefaultContentItems>
+		<Authors>Rafsanul Hasan</Authors>
+		<Company>Dev Skill</Company>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="4.9.4" />
+		<PackageReference Include="Devskill.SSLCommerz.Core" Version="1.0.0.18-preview1" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
 	</ItemGroup>
 
@@ -29,13 +35,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
 			<Version>3.1.0</Version>
 		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-		<PackageReference Include="Autofac.Extensions.DependencyInjection">
-			<Version>5.0.1</Version>
-		</PackageReference>
-	</ItemGroup>
+	</ItemGroup>			  
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
 		<PackageReference Include="Autofac.Extensions.DependencyInjection">
@@ -64,22 +64,16 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\DevSkill.SSLCommerz.Core\DevSkill.SSLCommerz.Core.csproj" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net46'">
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="*.*.cs" />
 		<Compile Remove="*.*.cs" />
-	</ItemGroup> 
-
-	<ItemGroup Condition="'$(TargetFramework)'=='net45'">
-		<Compile Include="*.net45.cs" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)'=='net46'">
-		<Compile Include="*.net46.cs" />
-	</ItemGroup>
+	</ItemGroup> 			 
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.2'">
 		<Compile Include="*.netcore22.cs" />   
@@ -91,10 +85,14 @@
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
 		<Compile Include="*.netcore31.cs" />
-	</ItemGroup>	
+	</ItemGroup>
 
-	<ItemGroup>
-		<Compile Include="*.common.cs" />
+	<ItemGroup Condition="'$(TargetFramework)'=='net45'">
+		<Compile Include="*.net45.cs" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net46'">
+		<Compile Include="*.net46.cs" />
 	</ItemGroup>
 
 </Project>

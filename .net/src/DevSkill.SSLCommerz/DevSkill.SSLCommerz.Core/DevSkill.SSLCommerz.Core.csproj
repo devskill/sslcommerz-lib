@@ -13,11 +13,12 @@
 		<Product>Devskill.SSLCommerz.Core</Product>
 		<PackageId>Devskill.SSLCommerz.Core</PackageId>
 		<PackageVersion>$(Version)</PackageVersion>
-		<AssemblyVersion>1.0.0.17</AssemblyVersion>
-		<FileVersion>1.0.0.17</FileVersion>
-		<Version>1.0.0.0-beta2</Version>
+		<AssemblyVersion>1.0.0.18</AssemblyVersion>
+		<FileVersion>1.0.0.18</FileVersion>
+		<Version>1.0.0.18-preview1</Version>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Autofac" Version="4.9.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />

@@ -6,11 +6,15 @@ namespace DevSkill.SSLCommerz.Core
 	{
 		internal SSLCommerzSettings _Settings;
 
-		public PaymentInitiationRequestBuilder()
+		public PaymentInitiationRequestBuilder(SSLCommerzSettings settings, string storeId, string storePassword, string successUrl, string failUrl, string cancelUrl, string ipnUrl)
 		{
-			_Settings = new SSLCommerzSettings();
-			_Settings.ApiSettings = new SSLCommerzApiSettings();
-			_Settings.CallbackUrlSettings = new SSLCommerzUrlSettings();
+			_Settings = settings;
+			_Settings.ApiSettings.StoreId = storeId;
+			_Settings.ApiSettings.StorePassword = storePassword;
+			_Settings.CallbackUrlSettings.SuccessUrl = successUrl;
+			_Settings.CallbackUrlSettings.FailUrl = failUrl;
+			_Settings.CallbackUrlSettings.CancelUrl = cancelUrl;
+			_Settings.CallbackUrlSettings.IpnUrl = ipnUrl;
 		}
 
 		public PaymentInitiationRequestBuilder ConfigureApi(Action<SSLCommerzApiSettings> predicate)
@@ -18,6 +22,9 @@ namespace DevSkill.SSLCommerz.Core
 			predicate?.Invoke(_Settings.ApiSettings);
 			return this;
 		}
+
+		public void ConfigureEnvironment(PaymentEnvionment env)
+			=> _Settings.IsProduction = env == PaymentEnvionment.Production;
 
 		public PaymentInitiationRequestBuilder ConfigureUrl(Action<SSLCommerzUrlSettings> predicate)
 		{

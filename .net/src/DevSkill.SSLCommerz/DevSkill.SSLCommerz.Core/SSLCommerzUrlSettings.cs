@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DevSkill.SSLCommerz.Core
+﻿namespace DevSkill.SSLCommerz.Core
 {
 	public class SSLCommerzUrlSettings
 	{
