@@ -13,8 +13,8 @@
 		<Product>Devskill.SSLCommerz.Core</Product>
 		<PackageId>Devskill.SSLCommerz.Core</PackageId>
 		<PackageVersion>$(Version)</PackageVersion>
-		<AssemblyVersion>1.0.0.16</AssemblyVersion>
-		<FileVersion>1.0.0.16</FileVersion>
+		<AssemblyVersion>1.0.0.18</AssemblyVersion>
+		<FileVersion>1.0.0.18</FileVersion>
 		<Version>1.0.0.1-beta2</Version>
 	</PropertyGroup>
 	<ItemGroup>
@@ -38,7 +38,7 @@
 		<Compile Remove="*.cs;*\*.cs;*\*.*.cs" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-		<Compile Include="Autofac\*.net20.cs" />
+		<Compile Include="Autofac\*.net*.cs" />
 	</ItemGroup>
 	<ProjectExtensions>
 		<VisualStudio>

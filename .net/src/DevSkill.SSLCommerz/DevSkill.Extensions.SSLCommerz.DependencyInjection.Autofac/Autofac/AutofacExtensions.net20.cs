@@ -37,10 +37,15 @@ namespace DevSkill.Extensions.SSLCommerz.DependencyInjection
 			apiSetting?.Invoke(settings.ApiSettings);
 			urlSetting?.Invoke(settings.CallbackUrlSettings);
 			services.AddSingleton<ISettingService, SettingService>(sp => new SettingService(settings));
-			var client = new HttpClient();
-			client.BaseAddress = new Uri(_Settings.BaseUrl);
-			var svc = services.BuildServiceProvider().GetRequiredService<ISettingService>();
-			services.AddSingleton<ISSLCommerzService, SSLCommerzService>(sp => new SSLCommerzService(client, svc));
+
+			using (var client = new HttpClient
+			{
+				BaseAddress = new Uri(_Settings.BaseUrl)
+			})
+			{
+				var svc = services.BuildServiceProvider().GetRequiredService<ISettingService>();
+				services.AddSingleton<ISSLCommerzService, SSLCommerzService>(sp => new SSLCommerzService(client, svc));
+			}
 			return services;
 		}
 		public static IServiceCollection AddSSLCommerz(
@@ -51,6 +56,7 @@ namespace DevSkill.Extensions.SSLCommerz.DependencyInjection
 		)
 		{
 			var settings = new SSLCommerzSettings();
+			setting?.Invoke(settings);
 			services.ConfigureSSLCommerzSettings(settings, apiSetting, urlSetting);
 			services.ConfigureSSLCommerzServices(settings, apiSetting, urlSetting);
 			return services;
