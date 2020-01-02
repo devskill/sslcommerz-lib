@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;net452;net462;</TargetFrameworks>
+		<LangVersion Condition="'$(TargetFramework)'=='net452' Or '$(TargetFramework)'=='net462' Or '$(TargetFramework)'=='netstandard2.0'">
+			7.3
+		</LangVersion>
+		<LangVersion Condition="'$(TargetFramework)'=='netstandard2.1'">
+			8.0
+		</LangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Rafsanul Hasan</Authors>
+		<Company>Devskill</Company>
+		<Product>Devskill.SSLCommerz.Core</Product>
+		<PackageId>Devskill.SSLCommerz.Core</PackageId>
+		<PackageVersion>$(Version)</PackageVersion>
+		<AssemblyVersion>1.0.0.22</AssemblyVersion>
+		<FileVersion>1.0.0.22</FileVersion>
+		<Version>1.0.0.1-beta2</Version>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Autofac" Version="4.9.4" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.2'">
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />  
+		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='net452' Or '$(TargetFramework)'=='net462'">
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.2' Or '$(TargetFramework)'=='netcoreapp3.1'">
+		<ProjectReference Include="..\DevSkill.SSLCommerz.Core\DevSkill.SSLCommerz.Core.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='net452' Or '$(TargetFramework)'=='net462'">
+		<Reference Include="..\DevSkill.SSLCommerz.Core\bin\$(Configuration)\$(TargetFramework)\DevSkill.SSLCommerz.Core.dll" />
+	</ItemGroup>	 
+	<ItemGroup Condition="'$(TargetFramework)'=='netscoreapp2.2'">
+		<Compile Include="Autofac\*.netcore22.cs" />
+	</ItemGroup>	
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
+		<Compile Include="Autofac\*.netcore31.cs" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='netscoreapp2.2' Or '$(TargetFramework)'=='netcoreapp3.1'">
+		<Compile Include="Autofac\*.netcore.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\DevSkill.SSLCommerz.Core\DevSkill.SSLCommerz.Core.csproj" />
+	</ItemGroup>
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties BuildVersion_BuildVersioningStyle="" BuildVersion_UpdateFileVersion="True" BuildVersion_StartDate="2019/12/25" BuildVersion_UseUniversalClock="True" BuildVersion_UpdateAssemblyVersion="True" />
+		</VisualStudio>
+	</ProjectExtensions>
+</Project>
