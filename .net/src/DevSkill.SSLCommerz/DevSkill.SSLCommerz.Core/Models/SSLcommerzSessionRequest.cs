@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json;
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Text;
 
 namespace DevSkill.SSLCommerz.Core.Models
@@ -79,12 +82,12 @@ namespace DevSkill.SSLCommerz.Core.Models
 		)]
 		public string CancelUrl { get; set; }
 
-		//[StringLength(255)]
-		//[Url]
-		//[JsonProperty(
-		//	PropertyName = "ipn_url"
-		//)]
-		//public string IpnUrl { get; set; }
+		[StringLength(255)]
+		[Url]
+		[JsonProperty(
+			PropertyName = "ipn_url"
+		)]
+		public string IpnUrl { get; set; }
 
 		[StringLength(30)]
 		[JsonProperty(
@@ -239,6 +242,40 @@ namespace DevSkill.SSLCommerz.Core.Models
 		)]
 		public string ProductProfile { get; set; }
 
+		[JsonProperty(
+			PropertyName = "cart",
+			Required = Required.AllowNull
+		)]
+		public IEnumerable<Cart> CartItems { get; set; }
+
+		[Decimal(10,2)]
+		[JsonProperty(
+			PropertyName = "product_amount",
+			Required = Required.AllowNull
+		)]
+		public decimal ProductAmount { get; set; }
+
+		[Decimal(10, 2)]
+		[JsonProperty(
+			PropertyName = "vat",
+			Required = Required.AllowNull
+		)]
+		public decimal VAT { get; set; }
+
+		[Decimal(10, 2)]
+		[JsonProperty(
+			PropertyName = "discount_amount",
+			Required = Required.AllowNull
+		)]
+		public decimal DiscountAmount { get; set; }
+
+		[Decimal(10, 2)]
+		[JsonProperty(
+			PropertyName = "convenience_fee",
+			Required = Required.AllowNull
+		)]
+		public decimal ConvenienceFee { get; set; }
+
 		#endregion
 
 		public override string ToString()
@@ -265,6 +302,18 @@ namespace DevSkill.SSLCommerz.Core.Models
 					else if (p.PropertyType == typeof(EMITransactionModel.EMIOption)
 						|| p.PropertyType == typeof(EMITransactionModel.EMIMaxInstallmentOption))
 						sb.Append($"{jsonPropertyName}={ (int)p.GetValue(this)}");
+					else if (p.PropertyType == typeof(IEnumerable)
+						|| p.PropertyType == typeof(IEnumerable<>)
+						|| p.PropertyType == typeof(Array))
+					{						
+						var values = (Array)p.GetValue(this);
+						if (values.Length > 0)
+						{
+							var jsonValues = JsonConvert.SerializeObject(values);
+							var encodedString = WebUtility.UrlEncode(jsonValues);
+							sb.Append($"{jsonPropertyName}={encodedString}");
+						}
+					}
 					if (i < properties.Length - 1)
 						sb.Append("&");
 				}
