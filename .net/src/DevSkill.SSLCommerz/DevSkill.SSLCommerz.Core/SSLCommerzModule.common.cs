@@ -15,11 +15,31 @@ namespace DevSkill.Extensions.SSLCommerz.DependencyInjection
 
 		public SSLCommerzModule(
 			SSLCommerzSettings settings,
+			SSLCommerzApiSettings apiSettings,
+			SSLCommerzUrlSettings urlSettings,
 			int version
 		)
 			: base()
 		{
 			_settings = settings;
+			_settings.ApiSettings = apiSettings;
+			_settings.CallbackUrlSettings = urlSettings;
+			if (version != 4)
+				throw new ArgumentOutOfRangeException(nameof(version), "Only API version 4 is supperted");
+			_settings.Version = version;
+		}
+
+		public SSLCommerzModule(
+			SSLCommerzSettings settings,
+			Action<SSLCommerzApiSettings> apiSettingsDelegate,
+			Action<SSLCommerzUrlSettings> urlSettingsDelegate,
+			int version
+		)
+			: base()
+		{
+			_settings = settings;
+			apiSettingsDelegate?.Invoke(_settings.ApiSettings);
+			urlSettingsDelegate?.Invoke(_settings.CallbackUrlSettings);
 			if (version != 4)
 				throw new ArgumentOutOfRangeException(nameof(version), "Only API version 4 is supperted");
 			_settings.Version = version;
